@@ -13,7 +13,7 @@ on enable-low-power
 
     # enable governor
     write /sys/devices/system/cpu/cpu0/online 1
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "powersave"
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 800000
     # enable thermal core_control now
     write /sys/module/msm_thermal/core_control/enabled 1
@@ -40,11 +40,11 @@ on enable-low-power
 
     # Update foreground and background cpusets
     # Reserve CPU 3 for the top app
-    write /dev/cpuset/foreground/cpus 0-2
-    write /dev/cpuset/foreground/boost/cpus 0-3
+    write /dev/cpuset/foreground/cpus 0
+    write /dev/cpuset/foreground/boost/cpus 0
     write /dev/cpuset/background/cpus 0
-    write /dev/cpuset/system-background/cpus 0-1
-    write /dev/cpuset/top-app/cpus 0-3
+    write /dev/cpuset/system-background/cpus 0
+    write /dev/cpuset/top-app/cpus 0
 
     rm /data/system/perfd/default_values
     start perfd
@@ -60,4 +60,4 @@ on property:init.svc.recovery=running
     trigger enable-low-power
 
 on property:dev.bootcomplete=1
-    setprop sys.io.scheduler bfq
+    setprop sys.io.scheduler cfq
